@@ -7,7 +7,7 @@ namespace Djikstra
     {
         static void Main(string[] args)
         {
-            int[,] graph = new int[,] {                
+            int[,] matrix = new int[,] {                
                 {0, 4, 7, 0, 7, 0, 0, 0, 0, 0 },
                 {4, 0, 3, 12, 0, 0, 0, 5, 0, 0 }, 
                 {7, 3, 0, 0, 0, 0, 4, 0, 12, 0}, 
@@ -20,8 +20,7 @@ namespace Djikstra
                 {0, 0, 0, 0, 0, 0, 8, 9, 7, 0}
              };
 
-
-            var list = Djikstra(graph, 0);
+            var list = Djikstra(matrix, 4, Convert.ToInt32(Math.Sqrt(matrix.Length)));
 
             foreach (var item in list)
             {
@@ -29,75 +28,73 @@ namespace Djikstra
             }
         }
 
-        static public Array Djikstra(int[,] graph, int startNode)
+        static public Array Djikstra(int[,] matrix, int startNode, int numberOfNodes)
         {
-            int[] distances = new int[10];
-            bool[] visited = new bool[10];
+            int[] edges = new int[numberOfNodes];
+            bool[] visited = new bool[numberOfNodes];
 
-            for (int i = 0; i < 10; i++)
-            {
-               
-                    distances[i] = (int.MaxValue);
-                    visited[i] = (false);
-                
+            for (int i = 0; i < numberOfNodes; i++)
+            {               
+                    edges[i] = (int.MaxValue);
             }
 
-            distances[startNode] = 0;
+            edges[startNode] = 0;
 
-            return ShortestPath(distances, visited, graph);
+            return ShortestPath(edges, visited, matrix, numberOfNodes);
+
+            }
+            private static Array ShortestPath(int[] edges, bool[] visited, int[,] matrix, int numberOfNodes)
+        {
+            var shortestDistance = int.MaxValue;
+            var shortestIndex = -1;
+
+            for (int i = 0; i < numberOfNodes; i++)
+            {
+                if (edges[i] < shortestDistance && !visited[i])
+                {
+                    shortestDistance = edges[i];
+                    shortestIndex = i;
+                }
+            }
+
+            if (shortestIndex == -1) return edges;
+
+            for (int i = 0; i < numberOfNodes; i++)
+            {
+                if (matrix[shortestIndex, i] != 0 && edges[i] > edges[shortestIndex] + matrix[shortestIndex, i])
+                {
+                    edges[i] = edges[shortestIndex] + matrix[shortestIndex, i];
+                }
+                visited[shortestIndex] = true;
+            }
+        
+                return ShortestPath(edges, visited, matrix, numberOfNodes);
+            }
+        }
+    }
 
             //    while (true)
             //    {
             //        var shortestDistance = int.MaxValue;
             //        var shortestIndex = -1;
 
-            //        for (int i = 0; i < 10; i++)
+            //        for (int i = 0; i < numberOfNodes; i++)
             //        {
 
-            //                if (distances[i] < shortestDistance && !visited[i])
+            //                if (edges[i] < shortestDistance && !visited[i])
             //                {
-            //                    shortestDistance = distances[i];
+            //                    shortestDistance = edges[i];
             //                    shortestIndex = i;
             //                }                    
             //        }
-            //            if (shortestIndex == -1) return distances;
+            //            if (shortestIndex == -1) return edges;
 
-            //        for (int i = 0; i < 10; i++)
+            //        for (int i = 0; i < numberOfNodes; i++)
             //        {                   
-            //                if (graph[shortestIndex, i] != 0 && distances[i] > distances[shortestIndex] + graph[shortestIndex, i])
+            //                if (matrix[shortestIndex, i] != 0 && edges[i] > edges[shortestIndex] + matrix[shortestIndex, i])
             //                {
-            //                    distances[i] = distances[shortestIndex] + graph[shortestIndex, i];
+            //                    edges[i] = edges[shortestIndex] + matrix[shortestIndex, i];
             //                }   
             //            visited[shortestIndex] = true;
             //        }
             //    }
-            }
-            private static Array ShortestPath(int[] distances, bool[] visited, int[,] graph)
-        {
-            var shortestDistance = int.MaxValue;
-            var shortestIndex = -1;
-
-            for (int i = 0; i < 10; i++)
-            {
-
-                if (distances[i] < shortestDistance && !visited[i])
-                {
-                    shortestDistance = distances[i];
-                    shortestIndex = i;
-                }
-            }
-            if (shortestIndex == -1) return distances;
-
-            for (int i = 0; i < 10; i++)
-            {
-                if (graph[shortestIndex, i] != 0 && distances[i] > distances[shortestIndex] + graph[shortestIndex, i])
-                {
-                    distances[i] = distances[shortestIndex] + graph[shortestIndex, i];
-                }
-                visited[shortestIndex] = true;
-            }
-        
-                return ShortestPath(distances, visited, graph);
-            }
-        }
-    }
