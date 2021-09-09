@@ -20,7 +20,7 @@ namespace Djikstra
                 {0, 0, 0, 0, 0, 0, 8, 9, 7, 0}
              };
 
-            var list = Djikstra(matrix, 4, Convert.ToInt32(Math.Sqrt(matrix.Length)));
+            var list = Djikstra(matrix, 0, Convert.ToInt32(Math.Sqrt(matrix.Length)));
 
             foreach (var item in list)
             {
@@ -43,11 +43,15 @@ namespace Djikstra
             return ShortestPath(edges, visited, matrix, numberOfNodes);
 
             }
-            private static Array ShortestPath(int[] edges, bool[] visited, int[,] matrix, int numberOfNodes)
+
+        private static Array ShortestPath(int[] edges, bool[] visited, int[,] matrix, int numberOfNodes)
         {
+            //Sets shortestDistance closest to infinity and shortest index to -1
+            //since no node is yet visited
             var shortestDistance = int.MaxValue;
             var shortestIndex = -1;
-
+            //Finds the starting node and sets its edge to 0 and shortestIndex to that index
+            //After staring node is set, looks for shortest edge in unvisited nodes
             for (int i = 0; i < numberOfNodes; i++)
             {
                 if (edges[i] < shortestDistance && !visited[i])
@@ -56,19 +60,21 @@ namespace Djikstra
                     shortestIndex = i;
                 }
             }
-
+            //If no edge is shorter that shortestDistance and all nodes are visited
+            //returns the array with info about shortest path between nodes
             if (shortestIndex == -1) return edges;
 
             for (int i = 0; i < numberOfNodes; i++)
             {
-                if (matrix[shortestIndex, i] != 0 && edges[i] > edges[shortestIndex] + matrix[shortestIndex, i])
+                if (matrix[i, shortestIndex] != 0 && edges[i] > edges[shortestIndex] + matrix[i, shortestIndex])
                 {
-                    edges[i] = edges[shortestIndex] + matrix[shortestIndex, i];
+                    edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
                 }
                 visited[shortestIndex] = true;
             }
-        
-                return ShortestPath(edges, visited, matrix, numberOfNodes);
+            //Calls the method again with updated props (recursion)
+            return ShortestPath(edges, visited, matrix, numberOfNodes);
+
             }
         }
     }
@@ -91,9 +97,9 @@ namespace Djikstra
 
             //        for (int i = 0; i < numberOfNodes; i++)
             //        {                   
-            //                if (matrix[shortestIndex, i] != 0 && edges[i] > edges[shortestIndex] + matrix[shortestIndex, i])
+            //                if (matrix[i, shortestIndex] != 0 && edges[i] > edges[shortestIndex] + matrix[i, shortestIndex])
             //                {
-            //                    edges[i] = edges[shortestIndex] + matrix[shortestIndex, i];
+            //                    edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
             //                }   
             //            visited[shortestIndex] = true;
             //        }
