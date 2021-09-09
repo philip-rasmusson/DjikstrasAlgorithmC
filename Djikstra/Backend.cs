@@ -15,7 +15,10 @@ namespace Djikstra
         {
             for (int i = 0; i < numberOfNodes; i++)
             {
-                IfMatrixIsNotZero(edges, matrix, shortestIndex, i);
+                IfMatrixIsNotZero(edges,
+                                  matrix,
+                                  shortestIndex,
+                                  i);
                 visited[shortestIndex] = true;
             }
         }
@@ -29,7 +32,11 @@ namespace Djikstra
         {
             for (int i = 0; i < numberOfNodes; i++)
             {
-                FindNearestEdgeWithoutVisitingNodesTwice(edges, visited, ref shortestDistance, ref shortestIndex, i);
+                FindNearestEdgeWithoutVisitingNodesTwice(edges,
+                                                         visited,
+                                                         ref shortestDistance,
+                                                         ref shortestIndex,
+                                                         i);
             }
         }
 
@@ -65,7 +72,8 @@ namespace Djikstra
             ref int shortestIndex,
             int i)
         {
-            if (edges[i] < shortestDistance && !visited[i])
+            if (edges[i] < shortestDistance
+                && !visited[i])
             {
                 shortestDistance = edges[i];
                 shortestIndex = i;
@@ -78,7 +86,8 @@ namespace Djikstra
             int shortestIndex,
             int i)
         {
-            if (!(matrix[i, shortestIndex] == 0 || edges[i] <= edges[shortestIndex] + matrix[i, shortestIndex]))
+            if (!(matrix[i, shortestIndex] == 0 ||
+                edges[i] <= edges[shortestIndex] + matrix[i, shortestIndex]))
             {
                 edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
             }
@@ -88,7 +97,11 @@ namespace Djikstra
         {
             try
             {
-                var node = Djikstra(Matrix.DefaultMatrix, 0, Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length))).GetEnumerator();
+                var node = Djikstra(
+                    Matrix.DefaultMatrix,
+                    0,
+                    Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)))
+                    .GetEnumerator();
 
                 while (node.MoveNext())
                 {
@@ -121,7 +134,11 @@ namespace Djikstra
 
                 if (shortestIndex == -1) return edges;
 
-                CalculateShortestPath(edges, visited, matrix, numberOfNodes, shortestIndex);
+                CalculateShortestPath(edges,
+                                      visited,
+                                      matrix,
+                                      numberOfNodes,
+                                      shortestIndex);
             }
             catch (Exception ex)
             {
@@ -129,7 +146,10 @@ namespace Djikstra
             }
 
             //Calls the method again with updated props (recursion)
-            return ShortestPath(edges, visited, matrix, numberOfNodes);
+            return ShortestPath(edges,
+                                visited,
+                                matrix,
+                                numberOfNodes);
         }
     }
 }
