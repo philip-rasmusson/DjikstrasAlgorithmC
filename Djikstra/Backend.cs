@@ -128,7 +128,12 @@ namespace Djikstra
                 var shortestIndex = -1;
                 //Finds the starting node and sets its edge to 0 and shortestIndex to that index
                 //After staring node is set, looks for shortest edge in unvisited nodes
-                CountNodes(edges, visited, numberOfNodes, ref shortestDistance, ref shortestIndex);
+                CountNodes(
+                    edges,
+                    visited,
+                    numberOfNodes,
+                    ref shortestDistance,
+                    ref shortestIndex);
                 //If no edge is shorter that shortestDistance and all nodes are visited
                 //returns the array with info about shortest path between nodes
 
