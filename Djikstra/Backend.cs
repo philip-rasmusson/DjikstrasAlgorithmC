@@ -6,7 +6,12 @@ namespace Djikstra
     {
         public const int maxValue = int.MaxValue;
 
-        public static void CalculateShortestPath(int[] edges, bool[] visited, int[,] matrix, int numberOfNodes, int shortestIndex)
+        public static void CalculateShortestPath(
+            int[] edges,
+            bool[] visited,
+            int[,] matrix,
+            int numberOfNodes,
+            int shortestIndex)
         {
             for (int i = 0; i < numberOfNodes; i++)
             {
@@ -15,7 +20,12 @@ namespace Djikstra
             }
         }
 
-        public static void CountNodes(int[] edges, bool[] visited, int numberOfNodes, ref int shortestDistance, ref int shortestIndex)
+        public static void CountNodes(
+            int[] edges,
+            bool[] visited,
+            int numberOfNodes,
+            ref int shortestDistance,
+            ref int shortestIndex)
         {
             for (int i = 0; i < numberOfNodes; i++)
             {
@@ -23,7 +33,10 @@ namespace Djikstra
             }
         }
 
-        public static Array Djikstra(int[,] matrix, int startNode, int numberOfNodes)
+        public static Array Djikstra(
+            int[,] matrix,
+            int startNode,
+            int numberOfNodes)
         {
             var edges = new int[numberOfNodes];
 
@@ -34,7 +47,10 @@ namespace Djikstra
 
             edges[startNode] = 0;
 
-            return ShortestPath(edges, new bool[numberOfNodes], matrix, numberOfNodes);
+            return ShortestPath(edges,
+                                new bool[numberOfNodes],
+                                matrix,
+                                numberOfNodes);
         }
 
         public static void ExceptionThrown(Exception ex)
@@ -42,7 +58,12 @@ namespace Djikstra
             Console.WriteLine("Error: " + ex);
         }
 
-        public static void FindNearestEdgeWithoutVisitingNodesTwice(int[] edges, bool[] visited, ref int shortestDistance, ref int shortestIndex, int i)
+        public static void FindNearestEdgeWithoutVisitingNodesTwice(
+            int[] edges,
+            bool[] visited,
+            ref int shortestDistance,
+            ref int shortestIndex,
+            int i)
         {
             if (edges[i] < shortestDistance && !visited[i])
             {
@@ -51,7 +72,11 @@ namespace Djikstra
             }
         }
 
-        public static void IfMatrixIsNotZero(int[] edges, int[,] matrix, int shortestIndex, int i)
+        public static void IfMatrixIsNotZero(
+            int[] edges,
+            int[,] matrix,
+            int shortestIndex,
+            int i)
         {
             if (!(matrix[i, shortestIndex] == 0 || edges[i] <= edges[shortestIndex] + matrix[i, shortestIndex]))
             {
@@ -76,7 +101,11 @@ namespace Djikstra
             }
         }
 
-        public static Array ShortestPath(int[] edges, bool[] visited, int[,] matrix, int numberOfNodes)
+        public static Array ShortestPath(
+            int[] edges,
+            bool[] visited,
+            int[,] matrix,
+            int numberOfNodes)
         {
             //Sets shortestDistance closest to infinity and shortest index to -1
             //since no node is yet visited
