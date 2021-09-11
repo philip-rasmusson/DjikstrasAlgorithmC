@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Djikstra
 {
@@ -94,10 +95,10 @@ namespace Djikstra
             }
         }
 
-        public static void RunMatrix(int[] startNodeEndNode)
+        public static void RunMatrix(List<int> startNodeEndNode)
         {
             var startNode = startNodeEndNode[0];
-            var endNode = startNodeEndNode[1];
+            var endNode = startNodeEndNode[startNodeEndNode.Count - 1];
             var count = 0;
 
             try
@@ -172,5 +173,6 @@ namespace Djikstra
 
             return parseOK;
         }
+  
     }
 }
