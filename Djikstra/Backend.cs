@@ -22,7 +22,8 @@ namespace Djikstra
                 visited[shortestIndex] = true;
             }
         }
-
+        //Finds the starting node and sets its edge to 0 and shortestIndex to that index
+        //After staring node is set, looks for shortest edge in unvisited nodes
         public static void CountNodes(
             int[] edges,
             bool[] visited,
@@ -103,15 +104,14 @@ namespace Djikstra
             {
                 var node = Djikstra(
                     Matrix.DefaultMatrix,
-                    0,
+                    startNode,
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)))
                     .GetEnumerator();
 
                 while (node.MoveNext())
                 {
                     if(count == endNode)
-                     Console.WriteLine($"Shortest way from {startNode} to {endNode} is {node.Current}");
-
+                     Console.WriteLine($"Quickest way from {Matrix.DefaultNodes[startNode]} to {Matrix.DefaultNodes[endNode]} is {node.Current}");
                     count++;
                 }
             }
@@ -132,9 +132,7 @@ namespace Djikstra
             try
             {
                 var shortestDistance = maxValue;
-                var shortestIndex = -1;
-                //Finds the starting node and sets its edge to 0 and shortestIndex to that index
-                //After staring node is set, looks for shortest edge in unvisited nodes
+                var shortestIndex = -1;                
                 CountNodes(
                     edges,
                     visited,
@@ -143,7 +141,6 @@ namespace Djikstra
                     ref shortestIndex);
                 //If no edge is shorter that shortestDistance and all nodes are visited
                 //returns the array with info about shortest path between nodes
-
                 if (shortestIndex == -1) return edges;
 
                 CalculateShortestPath(edges,
@@ -163,13 +160,14 @@ namespace Djikstra
                                 matrix,
                                 numberOfNodes);
         }
-        public static int Invalid_input_check()//checks if input is a correct given int
+        //checks if input is a correct given int
+        public static int Invalid_input_check()
         {
             int parseOK;
 
             while (!int.TryParse(Console.ReadLine(), out parseOK))
             {
-                Console.WriteLine("Invalid input, try again");
+                Console.WriteLine("Invalid input, only use digits");
             }
 
             return parseOK;
