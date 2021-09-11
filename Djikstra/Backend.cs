@@ -93,8 +93,12 @@ namespace Djikstra
             }
         }
 
-        public static void RunMatrix()
+        public static void RunMatrix(int[] startNodeEndNode)
         {
+            var startNode = startNodeEndNode[0];
+            var endNode = startNodeEndNode[1];
+            var count = 0;
+
             try
             {
                 var node = Djikstra(
@@ -105,7 +109,10 @@ namespace Djikstra
 
                 while (node.MoveNext())
                 {
-                    Console.WriteLine(node.Current);
+                    if(count == endNode)
+                     Console.WriteLine($"Shortest way from {startNode} to {endNode} is {node.Current}");
+
+                    count++;
                 }
             }
             catch (Exception ex)
@@ -155,6 +162,17 @@ namespace Djikstra
                                 visited,
                                 matrix,
                                 numberOfNodes);
+        }
+        public static int Invalid_input_check()//checks if input is a correct given int
+        {
+            int parseOK;
+
+            while (!int.TryParse(Console.ReadLine(), out parseOK))
+            {
+                Console.WriteLine("Invalid input, try again");
+            }
+
+            return parseOK;
         }
     }
 }

@@ -14,5 +14,6 @@
                 {0, 0, 12, 3, 0, 0, 13, 0, 0, 7},
                 {0, 0, 0, 0, 0, 0, 8, 9, 7, 0}
              };
+        public static char[] DefaultNodes => new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' };
     }
 }
