@@ -8,10 +8,12 @@ namespace Djikstra
 {
     public static class UserInput
     {
-        public static int[] GetUserInput(string message1, string message2)
+        public static List<int> GetUserInput()
         {
-            int[] startNodeEndNode = new int[2];
+            List<int> nodeQueue = new List<int>();
             var nodes = Matrix.DefaultNodes;
+            var whileLoop = true;
+            var delmal = false;
 
 
             for (int i = 0; i < nodes.Length; i++)
@@ -19,14 +21,36 @@ namespace Djikstra
                 Console.WriteLine($"Node {nodes[i]} = {i}");
             }
 
-            Console.WriteLine();
-            Console.WriteLine(message1);
-            startNodeEndNode[0] = Backend.Invalid_input_check();
 
-            Console.WriteLine(message2);
-            startNodeEndNode[1] = Backend.Invalid_input_check();
+            Console.WriteLine("Select start node (number): ");
+            nodeQueue.Add(Backend.Invalid_input_check());
 
-            return startNodeEndNode;
+            while (whileLoop)
+            {
+            Console.WriteLine("Do you want to add a delmål?");
+            Console.WriteLine("[Y]es / [N]o");
+
+            var delmalInput = Console.ReadLine();
+
+                if(delmalInput.ToLower() == "y") {
+                    delmal = true;
+                    whileLoop = false;
+                }
+                else if(delmalInput.ToLower() == "n") {
+                    whileLoop = false;
+                }
+            }
+
+            if(delmal)
+            {
+                Console.WriteLine("Select delmal node (number): ");
+                nodeQueue.Add(Backend.Invalid_input_check());
+            }
+
+            Console.WriteLine("Select end node (number): ");
+            nodeQueue.Add(Backend.Invalid_input_check());
+
+            return nodeQueue;
         }
         
     }

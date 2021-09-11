@@ -4,9 +4,7 @@
     {
         public static void Main()
         {
-            Backend.RunMatrix(              
-                UserInput.GetUserInput("Select start node: ", "Select end node: ")               
-            );
+            Backend.RunMatrix(UserInput.GetUserInput());
         }
     }
 }
