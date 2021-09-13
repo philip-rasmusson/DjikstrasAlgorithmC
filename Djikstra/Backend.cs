@@ -98,7 +98,7 @@ namespace Djikstra
         public static void RunMatrix(List<int> startNodeEndNode)
         {
             var startNode = startNodeEndNode[0];
-            var endNode = startNodeEndNode[startNodeEndNode.Count - 1];
+            var endNode = startNodeEndNode[1];
             var count = 0;
 
             try
@@ -112,9 +112,11 @@ namespace Djikstra
                 while (node.MoveNext())
                 {
                     if(count == endNode)
-                     Console.WriteLine($"Quickest way from {Matrix.DefaultNodes[startNode]} to {Matrix.DefaultNodes[endNode]} is {node.Current}");
+                     Console.WriteLine($"Fastest time from {Matrix.DefaultNodes[startNode]} to {Matrix.DefaultNodes[endNode]} is {node.Current}");
                     count++;
                 }
+                startNodeEndNode.Remove(startNode);
+                if (startNodeEndNode.Count >= 2) RunMatrix(startNodeEndNode);
             }
             catch (Exception ex)
             {
@@ -140,7 +142,7 @@ namespace Djikstra
                     numberOfNodes,
                     ref shortestDistance,
                     ref shortestIndex);
-                //If no edge is shorter that shortestDistance and all nodes are visited
+                //If no edge is shorter than shortestDistance and all nodes are visited
                 //returns the array with info about shortest path between nodes
                 if (shortestIndex == -1) return edges;
 
