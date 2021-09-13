@@ -10,10 +10,10 @@ namespace Djikstra
     {
         public static List<int> GetUserInput()
         {
-            List<int> nodeQueue = new List<int>();
+            List<int> nodeQueue = new();
             var nodes = Matrix.DefaultNodes;
             var whileLoop = true;
-            var delmal = false;
+            var detour = false;
 
 
             for (int i = 0; i < nodes.Length; i++)
@@ -30,20 +30,20 @@ namespace Djikstra
             Console.WriteLine("Do you want to add a delmål?");
             Console.WriteLine("[Y]es / [N]o");
 
-            var delmalInput = Console.ReadLine();
+            var detourInput = Console.ReadLine();
 
-                if(delmalInput.ToLower() == "y") {
-                    delmal = true;
+                if(detourInput.ToLower() == "y") {
+                    detour = true;
                     whileLoop = false;
                 }
-                else if(delmalInput.ToLower() == "n") {
+                else if(detourInput.ToLower() == "n") {
                     whileLoop = false;
                 }
             }
 
-            if(delmal)
+            if(detour)
             {
-                Console.WriteLine("Select delmal node (number): ");
+                Console.WriteLine("Select detour node (number): ");
                 nodeQueue.Add(Backend.Invalid_input_check());
             }
 
