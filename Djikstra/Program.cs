@@ -1,4 +1,6 @@
-﻿namespace Djikstra
+﻿using System;
+
+namespace Djikstra
 {
     public static class Program
     {
