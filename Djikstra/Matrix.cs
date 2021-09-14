@@ -1,4 +1,6 @@
-﻿namespace Djikstra
+﻿using System.Collections.Generic;
+
+namespace Djikstra
 {
     public static class Matrix
     {
@@ -15,5 +17,7 @@
                 {0, 0, 0, 0, 0, 0, 8, 9, 7, 0}
              };
         public static char[] DefaultNodes => new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' };
+
+        public static bool[] nodeNamesList = new bool[10];
     }
 }

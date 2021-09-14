@@ -5,21 +5,27 @@ namespace Djikstra
 {
     public static class Backend
     {
-        public const int maxValue = int.MaxValue;
+        public const int maxValue = int.MaxValue;        
+        
 
         public static void CalculateShortestPath(
             int[] edges,
             bool[] visited,
             int[,] matrix,
             int numberOfNodes,
-            int shortestIndex)
+            int shortestIndex,
+            int startNode,
+            List<Node> nodePath)
         {
             for (int i = 0; i < numberOfNodes; i++)
             {
                 IfMatrixIsNotZero(edges,
                                   matrix,
                                   shortestIndex,
-                                  i);
+                                  i,
+                                  startNode,
+                                  nodePath);             
+                
                 visited[shortestIndex] = true;
             }
         }
@@ -42,12 +48,13 @@ namespace Djikstra
             }
         }
 
-        public static Array Djikstra(
+        public static List<Node> Djikstra(
             int[,] matrix,
             int startNode,
             int numberOfNodes)
         {
             var edges = new int[numberOfNodes];
+            var nodePath = new List<Node>();
 
             for (int i = 0; i < numberOfNodes; i++)
             {
@@ -59,7 +66,9 @@ namespace Djikstra
             return ShortestPath(edges,
                                 new bool[numberOfNodes],
                                 matrix,
-                                numberOfNodes);
+                                numberOfNodes,
+                                startNode,
+                                nodePath);
         }
 
         public static void ExceptionThrown(Exception ex)
@@ -86,35 +95,42 @@ namespace Djikstra
             int[] edges,
             int[,] matrix,
             int shortestIndex,
-            int i)
+            int i,
+            int startNode,
+            List<Node> nodePath)
         {
             if (!(matrix[i, shortestIndex] == 0 ||
                 edges[i] <= edges[shortestIndex] + matrix[i, shortestIndex]))
             {
                 edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
+                var node = new Node(Matrix.DefaultNodes[shortestIndex], Matrix.DefaultNodes[i], edges[i]);
+                nodePath.Add(node);
+
             }
+          
         }
 
         public static void RunMatrix(List<int> startNodeEndNode)
         {
             var startNode = startNodeEndNode[0];
             var endNode = startNodeEndNode[1];
-            var count = 0;
 
             try
             {
                 var node = Djikstra(
                     Matrix.DefaultMatrix,
                     startNode,
-                    Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)))
-                    .GetEnumerator();
+                    Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
 
-                while (node.MoveNext())
+                foreach (var item in node)
                 {
-                    if(count == endNode)
-                     Console.WriteLine($"Fastest time from {Matrix.DefaultNodes[startNode]} to {Matrix.DefaultNodes[endNode]} is {node.Current}");
-                    count++;
+                    if(item.NodeB == Matrix.DefaultNodes[endNode])
+                    {
+                        Console.WriteLine($"From {Matrix.DefaultNodes[startNode]} to {item.NodeA} to {item.NodeB} is {item.Egde}");
+                    }
                 }
+
+ 
                 startNodeEndNode.Remove(startNode);
                 if (startNodeEndNode.Count >= 2) RunMatrix(startNodeEndNode);
             }
@@ -124,11 +140,13 @@ namespace Djikstra
             }
         }
 
-        public static Array ShortestPath(
+        public static List<Node> ShortestPath(
             int[] edges,
             bool[] visited,
             int[,] matrix,
-            int numberOfNodes)
+            int numberOfNodes,
+            int startNode,
+            List<Node> nodePath)
         {
             //Sets shortestDistance closest to infinity and shortest index to -1
             //since no node is yet visited
@@ -144,35 +162,39 @@ namespace Djikstra
                     ref shortestIndex);
                 //If no edge is shorter than shortestDistance and all nodes are visited
                 //returns the array with info about shortest path between nodes
-                if (shortestIndex == -1) return edges;
+                if (shortestIndex == -1) return nodePath;
 
                 CalculateShortestPath(edges,
                                       visited,
                                       matrix,
                                       numberOfNodes,
-                                      shortestIndex);
+                                      shortestIndex,
+                                      startNode,
+                                      nodePath);
             }
             catch (Exception ex)
             {
                 ExceptionThrown(ex);
             }
 
+
+
             //Calls the method again with updated props (recursion)
             return ShortestPath(edges,
                                 visited,
                                 matrix,
-                                numberOfNodes);
+                                numberOfNodes,
+                                startNode,
+                                nodePath);
         }
         //checks if input is a correct given int
         public static int Invalid_input_check()
         {
             int parseOK;
-
             while (!int.TryParse(Console.ReadLine(), out parseOK))
             {
                 Console.WriteLine("Invalid input, only use digits");
             }
-
             return parseOK;
         }
   
