@@ -18,6 +18,5 @@ namespace Djikstra
              };
         public static char[] DefaultNodes => new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' };
 
-        public static bool[] nodeNamesList = new bool[10];
     }
 }
