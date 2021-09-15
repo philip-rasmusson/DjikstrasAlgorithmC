@@ -120,15 +120,24 @@ namespace Djikstra
 
                 path = Recursion(node, path, startNode, Matrix.DefaultNodes[endNode]);
 
-                startNodeEndNode.Remove(startNode);
-                if (startNodeEndNode.Count >= 2) RunMatrix(startNodeEndNode);
 
-                path.Add(Matrix.DefaultNodes[startNode]);
+                 path.Reverse();
 
                 foreach (var item in path)
                 {
                     Console.WriteLine(item);
                 }
+
+                if (startNodeEndNode.Count > 2)
+                    Console.WriteLine("DETOUR STOP");
+ 
+                startNodeEndNode.Remove(startNode);
+                if (startNodeEndNode.Count >= 2)
+                { 
+                    RunMatrix(startNodeEndNode); 
+                }
+               
+
             }
             catch (Exception ex)
             {
@@ -146,7 +155,9 @@ namespace Djikstra
 
                     if (node[i].NodeA == Matrix.DefaultNodes[startNode])
                     {
-                        path.Add(node[i].NodeA);
+
+                        path.Add(Matrix.DefaultNodes[startNode]);
+                      
                         return path;
                     }
                     endNode = node[i].NodeA;
@@ -205,9 +216,10 @@ namespace Djikstra
         {
             int parseOK;
 
-            while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK >= max || parseOK <= min)
+            while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK < min || parseOK >= max)
+
             {
-                Console.WriteLine("Invalid input, only use digits");
+                Console.WriteLine("Invalid input");
             }
             return parseOK;
         }
