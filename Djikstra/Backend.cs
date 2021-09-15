@@ -5,8 +5,7 @@ namespace Djikstra
 {
     public static class Backend
     {
-        public const int maxValue = int.MaxValue;        
-        
+        public const int maxValue = int.MaxValue;
 
         public static void CalculateShortestPath(
             int[] edges,
@@ -14,7 +13,6 @@ namespace Djikstra
             int[,] matrix,
             int numberOfNodes,
             int shortestIndex,
-            int startNode,
             List<Node> nodePath)
         {
             for (int i = 0; i < numberOfNodes; i++)
@@ -23,12 +21,12 @@ namespace Djikstra
                                   matrix,
                                   shortestIndex,
                                   i,
-                                  startNode,
-                                  nodePath);             
-                
+                                  nodePath);
+
                 visited[shortestIndex] = true;
             }
         }
+
         //Finds the starting node and sets its edge to 0 and shortestIndex to that index
         //After staring node is set, looks for shortest edge in unvisited nodes
         public static void CountNodes(
@@ -96,7 +94,6 @@ namespace Djikstra
             int[,] matrix,
             int shortestIndex,
             int i,
-            int startNode,
             List<Node> nodePath)
         {
             if (!(matrix[i, shortestIndex] == 0 ||
@@ -105,9 +102,7 @@ namespace Djikstra
                 edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
                 var node = new Node(Matrix.DefaultNodes[shortestIndex], Matrix.DefaultNodes[i], edges[i]);
                 nodePath.Add(node);
-
             }
-          
         }
 
         public static void RunMatrix(List<int> startNodeEndNode)
@@ -123,19 +118,17 @@ namespace Djikstra
                     startNode,
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
 
-                path = recursion(node, path, startNode, Matrix.DefaultNodes[endNode]);
+                path = Recursion(node, path, startNode, Matrix.DefaultNodes[endNode]);
 
- 
                 startNodeEndNode.Remove(startNode);
                 if (startNodeEndNode.Count >= 2) RunMatrix(startNodeEndNode);
 
                 path.Add(Matrix.DefaultNodes[startNode]);
-              
+
                 foreach (var item in path)
                 {
                     Console.WriteLine(item);
                 }
-
             }
             catch (Exception ex)
             {
@@ -143,7 +136,7 @@ namespace Djikstra
             }
         }
 
-        public static List<char> recursion(List<Node> node, List<char> path, int startNode, char endNode)
+        public static List<char> Recursion(List<Node> node, List<char> path, int startNode, char endNode)
         {
             for (int i = 0; i < node.Count; i++)
             {
@@ -153,12 +146,13 @@ namespace Djikstra
 
                     if (node[i].NodeA == Matrix.DefaultNodes[startNode])
                     {
+                        path.Add(node[i].NodeA);
                         return path;
                     }
-                        endNode = node[i].NodeA;
+                    endNode = node[i].NodeA;
                 }
             }
-            return recursion(node, path, startNode, endNode);
+            return Recursion(node, path, startNode, endNode);
         }
 
         public static List<Node> ShortestPath(
@@ -174,7 +168,7 @@ namespace Djikstra
             try
             {
                 var shortestDistance = maxValue;
-                var shortestIndex = -1;                
+                var shortestIndex = -1;
                 CountNodes(
                     edges,
                     visited,
@@ -190,15 +184,12 @@ namespace Djikstra
                                       matrix,
                                       numberOfNodes,
                                       shortestIndex,
-                                      startNode,
                                       nodePath);
             }
             catch (Exception ex)
             {
                 ExceptionThrown(ex);
             }
-
-
 
             //Calls the method again with updated props (recursion)
             return ShortestPath(edges,
@@ -208,16 +199,17 @@ namespace Djikstra
                                 startNode,
                                 nodePath);
         }
+
         //checks if input is a correct given int
-        public static int Invalid_input_check()
+        public static int Invalid_input_check(int min, int max)
         {
             int parseOK;
-            while (!int.TryParse(Console.ReadLine(), out parseOK))
+
+            while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK >= max || parseOK <= min)
             {
                 Console.WriteLine("Invalid input, only use digits");
             }
             return parseOK;
         }
-  
     }
 }
