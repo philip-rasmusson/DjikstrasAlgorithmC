@@ -113,12 +113,27 @@ namespace Djikstra
 
             try
             {
-                var node = Djikstra(
+                var nodePath = Djikstra(
                     Matrix.DefaultMatrix,
                     startNode,
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
 
-                path = Recursion(node, path, startNode, Matrix.DefaultNodes[endNode]);
+                for (int i = 0; i < nodePath.Count-1; i++)
+                {
+                    Console.WriteLine(nodePath[i].NodeA + " - " + nodePath[i].NodeB + " - " + nodePath[i].Egde);
+                    for (int j = i+1; j < nodePath.Count; j++)
+                    {
+                        if(nodePath[i].NodeB == nodePath[j].NodeB)
+                        {
+                            if (nodePath[i].Egde <= nodePath[j].Egde)
+                                nodePath.RemoveAt(j);
+                            else
+                                nodePath.RemoveAt(i);
+                        }
+                    }
+                }
+
+                path = Recursion(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
 
 
                  path.Reverse();
@@ -149,6 +164,7 @@ namespace Djikstra
         {
             for (int i = 0; i < node.Count; i++)
             {
+                Console.WriteLine(node[i].NodeA + " - " + node[i].NodeB + " - " + node[i].Egde);
                 if (node[i].NodeB == endNode)
                 {
                     path.Add(node[i].NodeB);
