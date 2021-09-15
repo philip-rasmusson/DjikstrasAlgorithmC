@@ -114,6 +114,7 @@ namespace Djikstra
         {
             var startNode = startNodeEndNode[0];
             var endNode = startNodeEndNode[1];
+            var path = new List<char>();
 
             try
             {
@@ -122,22 +123,42 @@ namespace Djikstra
                     startNode,
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
 
-                foreach (var item in node)
-                {
-                    if(item.NodeB == Matrix.DefaultNodes[endNode])
-                    {
-                        Console.WriteLine($"From {Matrix.DefaultNodes[startNode]} to {item.NodeA} to {item.NodeB} is {item.Egde}");
-                    }
-                }
+                path = recursion(node, path, startNode, Matrix.DefaultNodes[endNode]);
 
  
                 startNodeEndNode.Remove(startNode);
                 if (startNodeEndNode.Count >= 2) RunMatrix(startNodeEndNode);
+
+                path.Add(Matrix.DefaultNodes[startNode]);
+              
+                foreach (var item in path)
+                {
+                    Console.WriteLine(item);
+                }
+
             }
             catch (Exception ex)
             {
                 ExceptionThrown(ex);
             }
+        }
+
+        public static List<char> recursion(List<Node> node, List<char> path, int startNode, char endNode)
+        {
+            for (int i = 0; i < node.Count; i++)
+            {
+                if (node[i].NodeB == endNode)
+                {
+                    path.Add(node[i].NodeB);
+
+                    if (node[i].NodeA == Matrix.DefaultNodes[startNode])
+                    {
+                        return path;
+                    }
+                        endNode = node[i].NodeA;
+                }
+            }
+            return recursion(node, path, startNode, endNode);
         }
 
         public static List<Node> ShortestPath(
