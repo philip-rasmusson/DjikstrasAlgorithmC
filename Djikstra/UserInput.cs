@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Djikstra
 {
@@ -21,23 +18,27 @@ namespace Djikstra
             }
 
             Console.WriteLine("Select start node (number): ");
+
             nodeQueue.Add(Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
 
             while (whileLoop)
             {
-            Console.WriteLine("Do you want to add a delmål?");
-            Console.WriteLine("[Y]es / [N]o");
+                Console.WriteLine("Do you want to add a delmål?");
+                Console.WriteLine("[Y]es / [N]o");
 
-            var detourInput = Console.ReadLine();
+                var detourInput = Console.ReadLine();
 
-                if(detourInput.ToLower() == "y") {
+                if (string.Equals(detourInput, "y", StringComparison.OrdinalIgnoreCase))
+                {
                     detour = true;
                     whileLoop = false;
                 }
-                else if(detourInput.ToLower() == "n") {
+                else if (string.Equals(detourInput, "n", StringComparison.OrdinalIgnoreCase))
+                {
                     whileLoop = false;
                 }
             }
+
             while(detour)
             {
                 Console.WriteLine("Select detour node (number): ");
@@ -57,6 +58,7 @@ namespace Djikstra
             while (whileLoop)
             {
             Console.WriteLine("Select end node (number): ");
+
                 var tempInput = (Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
                 if (!nodeQueue.Contains(tempInput))
                 {
@@ -71,6 +73,5 @@ namespace Djikstra
             Console.Clear();
             return nodeQueue;
         }
-        
     }
 }
