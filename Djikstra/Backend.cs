@@ -109,11 +109,12 @@ namespace Djikstra
           
         }
 
-        public static void RunMatrix(List<int> startNodeEndNode)
+        public static void RunMatrix(List<int> startNodeEndNode, int totalTime)
         {
             var startNode = startNodeEndNode[0];
             var endNode = startNodeEndNode[1];
             var path = new List<char>();
+            var printTotalTime = true;
 
             try
             {
@@ -124,7 +125,6 @@ namespace Djikstra
 
                 for (int i = 0; i < nodePath.Count-1; i++)
                 {
-                    Console.WriteLine(nodePath[i].NodeA + " - " + nodePath[i].NodeB + " - " + nodePath[i].Egde);
                     for (int j = i+1; j < nodePath.Count; j++)
                     {
                         if(nodePath[i].NodeB == nodePath[j].NodeB)
@@ -137,24 +137,36 @@ namespace Djikstra
                     }
                 }
 
+                for (int i = 0; i < nodePath.Count; i++)
+                {
+                    if (nodePath[i].NodeB == Matrix.DefaultNodes[endNode])
+                        totalTime += nodePath[i].Egde;
+                }
+
+                
+
                 path = Recursion(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
 
                  path.Reverse();
 
                 foreach (var item in path)
                 {
-                    Console.WriteLine(item);
+                    Console.Write(item + " ");
                 }
                 if (startNodeEndNode.Count > 2)
-                    Console.WriteLine("DETOUR STOP");
+                {
+                    Console.Write(" - DETOUR STOP - ");
+                    printTotalTime = false;
+                }
  
                 startNodeEndNode.Remove(startNode);
                 if (startNodeEndNode.Count >= 2)
                 { 
-                    RunMatrix(startNodeEndNode); 
+                    RunMatrix(startNodeEndNode, totalTime); 
                 }
-               
-
+                if (printTotalTime)
+                    
+                    Console.WriteLine("\n\nTotal time: " + totalTime);
             }
             catch (Exception ex)
             {
@@ -165,8 +177,7 @@ namespace Djikstra
         public static List<char> Recursion(List<Node> node, List<char> path, int startNode, char endNode)
         {
             for (int i = 0; i < node.Count; i++)
-            {
-                Console.WriteLine(node[i].NodeA + " - " + node[i].NodeB + " - " + node[i].Egde);
+            {              
                 if (node[i].NodeB == endNode)
                 {
                     path.Add(node[i].NodeB);

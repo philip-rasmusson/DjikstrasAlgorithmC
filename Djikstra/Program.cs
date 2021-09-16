@@ -6,7 +6,7 @@ namespace Djikstra
     {
         public static void Main()
         {
-            Backend.RunMatrix(UserInput.GetUserInput());
+            Backend.RunMatrix(UserInput.GetUserInput(), 0);
         }
     }
 }
