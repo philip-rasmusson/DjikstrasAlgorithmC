@@ -6,7 +6,6 @@ namespace Djikstra
     public static class Backend
     {
         public const int maxValue = int.MaxValue;
-
         public static void CalculateShortestPath(
             int[] edges,
             bool[] visited,
@@ -45,7 +44,6 @@ namespace Djikstra
                                                          i);
             }
         }
-
         public static List<Node> Djikstra(
             int[,] matrix,
             int startNode,
@@ -65,15 +63,12 @@ namespace Djikstra
                                 new bool[numberOfNodes],
                                 matrix,
                                 numberOfNodes,
-                                startNode,
                                 nodePath);
         }
-
         public static void ExceptionThrown(Exception ex)
         {
             Console.WriteLine("Error: " + ex);
         }
-
         public static void FindNearestEdgeWithoutVisitingNodesTwice(
             int[] edges,
             bool[] visited,
@@ -88,7 +83,6 @@ namespace Djikstra
                 shortestIndex = i;
             }
         }
-
         public static void IfMatrixIsNotZero(
             int[] edges,
             int[,] matrix,
@@ -104,7 +98,6 @@ namespace Djikstra
                 nodePath.Add(node);
             }
         }
-
         public static void RunMatrix(List<int> startNodeEndNode, int totalTime)
         {
             var startNode = startNodeEndNode[0];
@@ -200,13 +193,11 @@ namespace Djikstra
             }
             return  new List<char>(); 
         }
-
         public static List<Node> ShortestPath(
             int[] edges,
             bool[] visited,
             int[,] matrix,
             int numberOfNodes,
-            int startNode,
             List<Node> nodePath)
         {
             //Sets shortestDistance closest to infinity and shortest index to -1
@@ -242,7 +233,6 @@ namespace Djikstra
                                 visited,
                                 matrix,
                                 numberOfNodes,
-                                startNode,
                                 nodePath);
         }
         //checks if input is a correct given int between max and min value
