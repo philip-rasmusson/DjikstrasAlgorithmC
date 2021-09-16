@@ -25,7 +25,6 @@ namespace Djikstra
                 visited[shortestIndex] = true;
             }
         }
-
         //Finds the starting node and sets its edge to 0 and shortestIndex to that index
         //After staring node is set, looks for shortest edge in unvisited nodes
         public static void CountNodes(
@@ -56,9 +55,7 @@ namespace Djikstra
             {
                 edges[i] = maxValue;
             }
-
             edges[startNode] = 0;
-
             return ShortestPath(edges,
                                 new bool[numberOfNodes],
                                 matrix,
@@ -104,7 +101,6 @@ namespace Djikstra
             var endNode = startNodeEndNode[1];
             var path = new List<char>();
             var printTotalTime = true;
-
             try
             {
                 var nodePath = Djikstra(
@@ -125,7 +121,6 @@ namespace Djikstra
                         }
                     }
                 }
-
                 for (int i = 0; i < nodePath.Count; i++)
                 {
                     if (nodePath[i].NodeB == Matrix.DefaultNodes[endNode])
@@ -227,7 +222,6 @@ namespace Djikstra
             {
                 ExceptionThrown(ex);
             }
-
             //Calls the method again with updated props (recursion)
             return ShortestPath(edges,
                                 visited,
