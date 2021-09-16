@@ -139,12 +139,9 @@ namespace Djikstra
                         totalTime += nodePath[i].Egde;
                 }
 
-                
+                path = FindAllNodesInShortestPath(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
 
-                path = Recursion(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
-
-
-                 path.Reverse();
+                path.Reverse();
 
                 foreach (var item in path)
                 {
@@ -171,8 +168,16 @@ namespace Djikstra
                 ExceptionThrown(ex);
             }
         }
-
-        public static List<char> Recursion(List<Node> node, List<char> path, int startNode, char endNode)
+        //This recursion is to build a list of all the nodes visited in the shortest path.
+        //First we look for the element where NodeB == endNode and add this to our list.
+        //NodeA is the previous node in our path.
+        //If NodeA is same a startNode, we have a direct connection between
+        //startNode and endNode and can return that value. If not, then we change the value of endNode
+        //to NodeA, and call the funciton again until we find NodeA == startNode.
+        //Recursion is a good way to do this, since we only have to use one loop and get a lower ORDO.
+        //And we use the recusion when we find what we are looking for, so we don't have to
+        //look through the whole loop.
+        public static List<char> FindAllNodesInShortestPath(List<Node> node, List<char> path, int startNode, char endNode)
         {
             for (int i = 0; i < node.Count; i++)
             {              
@@ -187,10 +192,13 @@ namespace Djikstra
                       
                         return path;
                     }
-                    endNode = node[i].NodeA;
+
+                        endNode = node[i].NodeA;
+                        return FindAllNodesInShortestPath(node, path, startNode, endNode);
+
                 }
             }
-            return Recursion(node, path, startNode, endNode);
+            return  new List<char>(); 
         }
 
         public static List<Node> ShortestPath(
@@ -237,8 +245,8 @@ namespace Djikstra
                                 startNode,
                                 nodePath);
         }
+        //checks if input is a correct given int between max and min value
 
-        //checks if input is a correct given int
         public static int Invalid_input_check(int min, int max)
         {
             int parseOK;
