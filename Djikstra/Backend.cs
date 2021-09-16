@@ -5,7 +5,9 @@ namespace Djikstra
 {
     public static class Backend
     {
+        //Creates a var for max value
         public const int maxValue = int.MaxValue;
+        //Finds the shortest path from start node to all other unvisited nodes 
         public static void CalculateShortestPath(
             int[] edges,
             bool[] visited,
@@ -21,7 +23,7 @@ namespace Djikstra
                                   shortestIndex,
                                   i,
                                   nodePath);
-
+                //Sets node to visited
                 visited[shortestIndex] = true;
             }
         }
@@ -43,6 +45,7 @@ namespace Djikstra
                                                          i);
             }
         }
+
         public static List<Node> Djikstra(
             int[,] matrix,
             int startNode,
@@ -50,11 +53,12 @@ namespace Djikstra
         {
             var edges = new int[numberOfNodes];
             var nodePath = new List<Node>();
-
+            //Sets all edges to infinity
             for (int i = 0; i < numberOfNodes; i++)
             {
                 edges[i] = maxValue;
             }
+            //Sets start edge to 0
             edges[startNode] = 0;
             return ShortestPath(edges,
                                 new bool[numberOfNodes],
@@ -66,6 +70,7 @@ namespace Djikstra
         {
             Console.WriteLine("Error: " + ex);
         }
+
         public static void FindNearestEdgeWithoutVisitingNodesTwice(
             int[] edges,
             bool[] visited,
@@ -95,6 +100,7 @@ namespace Djikstra
                 nodePath.Add(node);
             }
         }
+        //Main method to find the shortest path between two nodes. Prints the result to console
         public static void RunMatrix(List<int> startNodeEndNode, int totalTime)
         {
             var startNode = startNodeEndNode[0];
@@ -107,14 +113,16 @@ namespace Djikstra
                     Matrix.DefaultMatrix,
                     startNode,
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
-
+                //*Temporary method to remove alternative, longer path*
+                //TODO: Check all methods to find out why sometimes alternative (not shortest) paths 
+                //is added to nodePath
                 for (int i = 0; i < nodePath.Count-1; i++)
                 {
                     for (int j = i+1; j < nodePath.Count; j++)
                     {
                         if(nodePath[i].NodeB == nodePath[j].NodeB)
                         {
-                            if (nodePath[i].Egde <= nodePath[j].Egde)
+                            if (nodePath[i].Edge <= nodePath[j].Edge)
                                 nodePath.RemoveAt(j);
                             else
                                 nodePath.RemoveAt(i);
@@ -124,7 +132,7 @@ namespace Djikstra
                 for (int i = 0; i < nodePath.Count; i++)
                 {
                     if (nodePath[i].NodeB == Matrix.DefaultNodes[endNode])
-                        totalTime += nodePath[i].Egde;
+                        totalTime += nodePath[i].Edge;
                 }
 
                 path = FindAllNodesInShortestPath(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
@@ -230,7 +238,6 @@ namespace Djikstra
                                 nodePath);
         }
         //checks if input is a correct given int between max and min value
-
         public static int Invalid_input_check(int min, int max)
         {
             int parseOK;
