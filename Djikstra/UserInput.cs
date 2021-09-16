@@ -70,6 +70,7 @@ namespace Djikstra
                     Console.WriteLine("This node is already selected, please check another");
                 }
             }
+            Console.Clear();
             return nodeQueue;
         }
     }
