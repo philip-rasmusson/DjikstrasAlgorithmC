@@ -19,7 +19,6 @@ namespace Djikstra
             }
             //Adds start node to list
             Console.WriteLine("Select start node (number): ");
-
             nodeQueue.Add(Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
             //Asks if user wants to add a detour
             while (whileLoop)
