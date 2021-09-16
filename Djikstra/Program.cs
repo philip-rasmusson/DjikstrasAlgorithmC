@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Djikstra
+﻿namespace Djikstra
 {
     public static class Program
     {
@@ -12,4 +10,3 @@ namespace Djikstra
         }
     }
 }
-       

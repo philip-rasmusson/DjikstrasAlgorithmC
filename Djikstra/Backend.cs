@@ -20,11 +20,12 @@ namespace Djikstra
                                   matrix,
                                   shortestIndex,
                                   i,
-                                  nodePath);             
-                
+                                  nodePath);
+
                 visited[shortestIndex] = true;
             }
         }
+
         //Finds the starting node and sets its edge to 0 and shortestIndex to that index
         //After staring node is set, looks for shortest edge in unvisited nodes
         public static void CountNodes(
@@ -95,7 +96,7 @@ namespace Djikstra
                 edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
                 var node = new Node(Matrix.DefaultNodes[shortestIndex], Matrix.DefaultNodes[i], edges[i]);
                 nodePath.Add(node);
-            }          
+            }
         }
         public static void RunMatrix(List<int> startNodeEndNode, int totalTime)
         {
@@ -139,6 +140,7 @@ namespace Djikstra
                 {
                     Console.Write(item + " ");
                 }
+
                 if (startNodeEndNode.Count > 2)
                 {
                     Console.Write(" - DETOUR STOP - ");
@@ -178,11 +180,15 @@ namespace Djikstra
 
                     if (node[i].NodeA == Matrix.DefaultNodes[startNode])
                     {
+
                         path.Add(Matrix.DefaultNodes[startNode]);
+                      
                         return path;
                     }
+
                         endNode = node[i].NodeA;
                         return FindAllNodesInShortestPath(node, path, startNode, endNode);
+
                 }
             }
             return  new List<char>(); 
@@ -199,7 +205,7 @@ namespace Djikstra
             try
             {
                 var shortestDistance = maxValue;
-                var shortestIndex = -1;                
+                var shortestIndex = -1;
                 CountNodes(
                     edges,
                     visited,
@@ -214,15 +220,13 @@ namespace Djikstra
                                       visited,
                                       matrix,
                                       numberOfNodes,
-                                      shortestIndex,                                      
+                                      shortestIndex,
                                       nodePath);
             }
             catch (Exception ex)
             {
                 ExceptionThrown(ex);
             }
-
-
 
             //Calls the method again with updated props (recursion)
             return ShortestPath(edges,
@@ -232,15 +236,17 @@ namespace Djikstra
                                 nodePath);
         }
         //checks if input is a correct given int between max and min value
+
         public static int Invalid_input_check(int min, int max)
         {
             int parseOK;
+
             while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK < min || parseOK >= max)
+
             {
                 Console.WriteLine("Invalid input");
             }
             return parseOK;
         }
-  
     }
 }

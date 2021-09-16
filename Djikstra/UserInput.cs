@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Djikstra
 {
@@ -22,20 +19,23 @@ namespace Djikstra
             }
             //Adds start node to list
             Console.WriteLine("Select start node (number): ");
+
             nodeQueue.Add(Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
             //Asks if user wants to add a detour
             while (whileLoop)
             {
-            Console.WriteLine("Do you want to add a delmål?");
-            Console.WriteLine("[Y]es / [N]o");
+                Console.WriteLine("Do you want to add a delmål?");
+                Console.WriteLine("[Y]es / [N]o");
 
-            var detourInput = Console.ReadLine();
+                var detourInput = Console.ReadLine();
 
-                if(detourInput.ToLower() == "y") {
+                if (string.Equals(detourInput, "y", StringComparison.OrdinalIgnoreCase))
+                {
                     detour = true;
                     whileLoop = false;
                 }
-                else if(detourInput.ToLower() == "n") {
+                else if (string.Equals(detourInput, "n", StringComparison.OrdinalIgnoreCase))
+                {
                     whileLoop = false;
                 }
             }
@@ -60,6 +60,7 @@ namespace Djikstra
             while (whileLoop)
             {
             Console.WriteLine("Select end node (number): ");
+
                 var tempInput = (Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
                 //Checks if end node is same as start node or detour node (not allowed)
                 if (!nodeQueue.Contains(tempInput))
@@ -77,6 +78,5 @@ namespace Djikstra
             //or start node, detour node and end node (3 elements)
             return nodeQueue;
         }
-        
     }
 }
