@@ -23,7 +23,7 @@ namespace Djikstra
             //Asks if user wants to add a detour
             while (whileLoop)
             {
-                Console.WriteLine("Do you want to add a delmål?");
+                Console.WriteLine("Do you want to add a detour?");
                 Console.WriteLine("[Y]es / [N]o");
 
                 var detourInput = Console.ReadLine();
@@ -39,7 +39,7 @@ namespace Djikstra
                 }
             }
             //If user want to add a detour, adds detour node to list
-            while(detour)
+            while (detour)
             {
                 Console.WriteLine("Select detour node (number): ");
                 var tempInput = (Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
@@ -58,7 +58,7 @@ namespace Djikstra
             whileLoop = true;
             while (whileLoop)
             {
-            Console.WriteLine("Select end node (number): ");
+                Console.WriteLine("Select end node (number): ");
 
                 var tempInput = (Backend.Invalid_input_check(0, Matrix.DefaultNodes.Length));
                 //Checks if end node is same as start node or detour node (not allowed)
@@ -76,6 +76,25 @@ namespace Djikstra
             //Returns a list of eiter start node and end node (2 elements)
             //or start node, detour node and end node (3 elements)
             return nodeQueue;
+        }
+
+        public static void NewSearchQuery()
+        {
+            Console.WriteLine("\nNew search? [Y]es or [N]o");
+            var newSearchQuery = Console.ReadLine();
+            if (string.Equals(newSearchQuery, "y", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.Clear();
+                Program.Main();
+            }
+            else if (string.Equals(newSearchQuery, "n", StringComparison.OrdinalIgnoreCase))
+            {
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("Incorrect input");
+            }
         }
     }
 }

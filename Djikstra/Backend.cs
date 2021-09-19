@@ -7,7 +7,8 @@ namespace Djikstra
     {
         //Creates a var for max value
         public const int maxValue = int.MaxValue;
-        //Finds the shortest path from start node to all other unvisited nodes 
+
+        //Finds the shortest path from start node to all other unvisited nodes
         public static void CalculateShortestPath(
             int[] edges,
             bool[] visited,
@@ -27,6 +28,7 @@ namespace Djikstra
                 visited[shortestIndex] = true;
             }
         }
+
         //Finds the starting node and sets its edge to 0 and shortestIndex to that index
         //After staring node is set, looks for shortest edge in unvisited nodes
         public static void CountNodes(
@@ -66,6 +68,7 @@ namespace Djikstra
                                 numberOfNodes,
                                 nodePath);
         }
+
         public static void ExceptionThrown(Exception ex)
         {
             Console.WriteLine("Error: " + ex);
@@ -85,6 +88,7 @@ namespace Djikstra
                 shortestIndex = i;
             }
         }
+
         public static void IfMatrixIsNotZero(
             int[] edges,
             int[,] matrix,
@@ -100,6 +104,7 @@ namespace Djikstra
                 nodePath.Add(node);
             }
         }
+
         //Main method to find the shortest path between two nodes. Prints the result to console
         public static void RunMatrix(List<int> startNodeEndNode, int totalTime)
         {
@@ -114,13 +119,13 @@ namespace Djikstra
                     startNode,
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
                 //*Temporary method to remove alternative, longer path*
-                //TODO: Check all methods to find out why sometimes alternative (not shortest) paths 
+                //TODO: Check all methods to find out why sometimes alternative (not shortest) paths
                 //is added to nodePath
-                for (int i = 0; i < nodePath.Count-1; i++)
+                for (int i = 0; i < nodePath.Count - 1; i++)
                 {
-                    for (int j = i+1; j < nodePath.Count; j++)
+                    for (int j = i + 1; j < nodePath.Count; j++)
                     {
-                        if(nodePath[i].NodeB == nodePath[j].NodeB)
+                        if (nodePath[i].NodeB == nodePath[j].NodeB)
                         {
                             if (nodePath[i].Edge <= nodePath[j].Edge)
                                 nodePath.RemoveAt(j);
@@ -135,7 +140,11 @@ namespace Djikstra
                         totalTime += nodePath[i].Edge;
                 }
 
-                path = FindAllNodesInShortestPath(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
+                path = FindAllNodesInShortestPath(
+                    nodePath,
+                    path,
+                    startNode,
+                    Matrix.DefaultNodes[endNode]);
 
                 path.Reverse();
 
@@ -149,21 +158,24 @@ namespace Djikstra
                     Console.Write(" - DETOUR STOP - ");
                     printTotalTime = false;
                 }
- 
+
                 startNodeEndNode.Remove(startNode);
                 if (startNodeEndNode.Count >= 2)
-                { 
-                    RunMatrix(startNodeEndNode, totalTime); 
+                {
+                    RunMatrix(startNodeEndNode, totalTime);
                 }
                 if (printTotalTime)
-                    
+                {
                     Console.WriteLine("\n\nTotal time: " + totalTime);
+                    UserInput.NewSearchQuery();
+                }
             }
             catch (Exception ex)
             {
                 ExceptionThrown(ex);
             }
         }
+
         //This recursion is to build a list of all the nodes visited in the shortest path.
         //First we look for the element where NodeB == endNode and add this to our list.
         //NodeA is the previous node in our path.
@@ -173,29 +185,35 @@ namespace Djikstra
         //Recursion is a good way to do this, since we only have to use one loop and get a lower ORDO.
         //And we use the recusion when we find what we are looking for, so we don't have to
         //look through the whole loop.
-        public static List<char> FindAllNodesInShortestPath(List<Node> node, List<char> path, int startNode, char endNode)
+        public static List<char> FindAllNodesInShortestPath(
+            List<Node> node,
+            List<char> path,
+            int startNode,
+            char endNode)
         {
             for (int i = 0; i < node.Count; i++)
-            {              
+            {
                 if (node[i].NodeB == endNode)
                 {
                     path.Add(node[i].NodeB);
 
                     if (node[i].NodeA == Matrix.DefaultNodes[startNode])
                     {
-
                         path.Add(Matrix.DefaultNodes[startNode]);
-                      
+
                         return path;
                     }
 
-                        endNode = node[i].NodeA;
-                        return FindAllNodesInShortestPath(node, path, startNode, endNode);
-
+                    endNode = node[i].NodeA;
+                    return FindAllNodesInShortestPath(node,
+                                                      path,
+                                                      startNode,
+                                                      endNode);
                 }
             }
-            return  new List<char>(); 
+            return new List<char>();
         }
+
         public static List<Node> ShortestPath(
             int[] edges,
             bool[] visited,
@@ -237,12 +255,15 @@ namespace Djikstra
                                 numberOfNodes,
                                 nodePath);
         }
+
         //checks if input is a correct given int between max and min value
         public static int Invalid_input_check(int min, int max)
         {
             int parseOK;
 
-            while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK < min || parseOK >= max)
+            while (!int.TryParse(Console.ReadLine(), out parseOK)
+                || parseOK < min
+                || parseOK >= max)
 
             {
                 Console.WriteLine("Invalid input");
