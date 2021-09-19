@@ -38,13 +38,13 @@ namespace Djikstra
             ref int shortestDistance,
             ref int shortestIndex)
         {
-            for (int i = 0; i < numberOfNodes; i++)            //O(n)
+            for (int i = 0; i < numberOfNodes; i++)
             {
-                FindNearestEdgeWithoutVisitingNodesTwice(edges,
-                                                         visited,
-                                                         ref shortestDistance,
-                                                         ref shortestIndex,
-                                                         i);
+                if (edges[i] < shortestDistance && !visited[i])            //O(n^2)
+                {
+                    shortestDistance = edges[i];
+                    shortestIndex = i;
+                }
             }
         }
 
@@ -110,22 +110,6 @@ namespace Djikstra
                 }
             }
             return new List<char>();
-        }
-
-        //Finding shortest edge in all unvisited nodes
-        public static void FindNearestEdgeWithoutVisitingNodesTwice(
-            int[] edges,
-            bool[] visited,
-            ref int shortestDistance,
-            ref int shortestIndex,
-            int i)
-        {
-            if (edges[i] < shortestDistance            //O(n)
-                && !visited[i])
-            {
-                shortestDistance = edges[i];
-                shortestIndex = i;
-            }
         }
 
         //Finds the shortest edge to all nodes
