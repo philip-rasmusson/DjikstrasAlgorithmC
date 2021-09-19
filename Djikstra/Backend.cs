@@ -7,7 +7,8 @@ namespace Djikstra
     {
         //Creates a var for max value
         public const int maxValue = int.MaxValue;
-        //Finds the shortest path from start node to all other unvisited nodes 
+
+        //Finds the shortest path from start node to all other unvisited nodes
         public static void CalculateShortestPath(
             int[] edges,
             bool[] visited,
@@ -16,7 +17,7 @@ namespace Djikstra
             int shortestIndex,
             List<Node> nodePath)
         {
-            for (int i = 0; i < numberOfNodes; i++)
+            for (int i = 0; i < numberOfNodes; i++)            //O(n)
             {
                 IfMatrixIsNotZero(edges,
                                   matrix,
@@ -27,6 +28,7 @@ namespace Djikstra
                 visited[shortestIndex] = true;
             }
         }
+
         //Finds the starting node and sets its edge to 0 and shortestIndex to that index
         //After staring node is set, looks for shortest edge in unvisited nodes
         public static void CountNodes(
@@ -38,13 +40,14 @@ namespace Djikstra
         {
             for (int i = 0; i < numberOfNodes; i++)
             {
-                FindNearestEdgeWithoutVisitingNodesTwice(edges,
-                                                         visited,
-                                                         ref shortestDistance,
-                                                         ref shortestIndex,
-                                                         i);
+                if (edges[i] < shortestDistance && !visited[i])            //O(n^2)
+                {
+                    shortestDistance = edges[i];
+                    shortestIndex = i;
+                }
             }
         }
+
         //Sets all edges to inifnity, then sets starting edge to zero
         //Returns the result of ShortestPath
         public static List<Node> Djikstra(
@@ -53,9 +56,8 @@ namespace Djikstra
             int numberOfNodes)
         {
             var edges = new int[numberOfNodes];
-            var nodePath = new List<Node>();
             //Sets all edges to infinity
-            for (int i = 0; i < numberOfNodes; i++)
+            for (int i = 0; i < numberOfNodes; i++)            //O(n)
             {
                 edges[i] = maxValue;
             }
@@ -67,27 +69,49 @@ namespace Djikstra
                                 new bool[numberOfNodes],
                                 matrix,
                                 numberOfNodes,
-                                nodePath);
+                                new List<Node>());
         }
+
         public static void ExceptionThrown(Exception ex)
         {
             Console.WriteLine("Error: " + ex);
         }
-        //Finding shortest edge in all unvisited nodes
-        public static void FindNearestEdgeWithoutVisitingNodesTwice(
-            int[] edges,
-            bool[] visited,
-            ref int shortestDistance,
-            ref int shortestIndex,
-            int i)
+
+        //This recursion is to build a list of all the nodes visited in the shortest path.
+        //First we look for the element where NodeB == endNode and add this to our list.
+        //NodeA is the previous node in our path.
+        //If NodeA is same a startNode, we have a direct connection between
+        //startNode and endNode and can return that value. If not, then we change the value of endNode
+        //to NodeA, and call the funciton again until we find NodeA == startNode.
+        //Recursion is a good way to do this, since we only have to use one loop and get a lower ORDO.
+        //And we use the recusion when we find what we are looking for, so we don't have to
+        //look through the whole loop.
+        public static List<char> FindAllNodesInShortestPath(
+            List<Node> node,
+            List<char> path,
+            int startNode,
+            char endNode)
         {
-            if (edges[i] < shortestDistance
-                && !visited[i])
+            foreach (var item in node)
             {
-                shortestDistance = edges[i];
-                shortestIndex = i;
+                if (item.NodeB == endNode)
+                {
+                    path.Add(item.NodeB);
+                    if (item.NodeA == Matrix.DefaultNodes[startNode])
+                    {
+                        path.Add(Matrix.DefaultNodes[startNode]);            //O(n^2)
+                        return path;
+                    }
+                    endNode = item.NodeA;
+                    return FindAllNodesInShortestPath(node,
+                                                      path,
+                                                      startNode,
+                                                      endNode);
+                }
             }
+            return new List<char>();
         }
+
         //Finds the shortest edge to all nodes
         //Adds info about NodeA, NodeB and edge to node-list
         public static void IfMatrixIsNotZero(
@@ -98,59 +122,92 @@ namespace Djikstra
             List<Node> nodePath)
         {
             if (!(matrix[i, shortestIndex] == 0 ||
-                edges[i] <= edges[shortestIndex] + matrix[i, shortestIndex]))
+                edges[i] <= edges[shortestIndex] + matrix[i, shortestIndex]))            //O(n)
             {
                 edges[i] = edges[shortestIndex] + matrix[i, shortestIndex];
-                var node = new Node(Matrix.DefaultNodes[shortestIndex], Matrix.DefaultNodes[i], edges[i]);
-                nodePath.Add(node);
+                nodePath.Add(new Node(Matrix.DefaultNodes[shortestIndex],
+                                      Matrix.DefaultNodes[i],
+                                      edges[i]));
             }
         }
-        //Main method to find the shortest path between two nodes. Prints the result to console
-        public static void RunMatrix(List<int> startNodeEndNode, int totalTime)
+
+        //checks if input is a correct given int between max and min value
+        public static int Invalid_input_check(int min, int max)
         {
-            var startNode = startNodeEndNode[0];
-            var endNode = startNodeEndNode[1];
+            int parseOK;
+
+            while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK < min || parseOK >= max)             //O(n)
+            {
+                Console.WriteLine("Invalid input");
+            }
+            return parseOK;
+        }
+
+        //Main method to find the shortest path between two nodes. Prints the result to console
+        public static void RunMatrix(
+            List<int> startNodeEndNode,
+            int totalTime)
+        {
             var path = new List<char>();
             var printTotalTime = true;
             try
             {
                 var nodePath = Djikstra(
                     Matrix.DefaultMatrix,
-                    startNode,
+                    startNodeEndNode[0],
                     Convert.ToInt32(Math.Sqrt(Matrix.DefaultMatrix.Length)));
                 //*Temporary loop to remove alternative, longer path*
                 //TODO: Check all methods to find out why sometimes alternative
                 //(not shortest) paths is added to nodePath
-                for (int i = 0; i < nodePath.Count-1; i++)
+                for (int i = 0; i < nodePath.Count - 1; i++)
                 {
-                    for (int j = i+1; j < nodePath.Count; j++)
+                    for (int j = i + 1; j < nodePath.Count; j++)
                     {
-                        if(nodePath[i].NodeB == nodePath[j].NodeB)
+                        if (nodePath[i].NodeB == nodePath[j].NodeB)
                         {
-                            if (nodePath[i].Edge <= nodePath[j].Edge)
+                            if (nodePath[i].Edge <= nodePath[j].Edge)            //O(n^4)
+                            {
                                 nodePath.RemoveAt(j);
+                            }
                             else
+                            {
                                 nodePath.RemoveAt(i);
+                            }
                         }
                     }
                 }
                 //Adds the total time to totalTime var
-                for (int i = 0; i < nodePath.Count; i++)
+                foreach (var item in nodePath)
                 {
-                    if (nodePath[i].NodeB == Matrix.DefaultNodes[endNode])
-                        totalTime += nodePath[i].Edge;
+                    if (item.NodeB == Matrix.DefaultNodes[startNodeEndNode[1]])            //O(n^1)
+                    {
+                        totalTime += item.Edge;
+                    }
                 }
                 //Tracks all nodes in shortest path from end node to start node
-                path = FindAllNodesInShortestPath(nodePath, path, startNode, Matrix.DefaultNodes[endNode]);
-                //Makes path correct order
-                path.Reverse();
-                //Prints all nodes in shortest path to console
-                foreach (var item in path)
+                try
                 {
-                    Console.Write(item + " ");
+                    path = FindAllNodesInShortestPath(nodePath,
+                                                      path,
+                                                      startNodeEndNode[0],
+                                                      Matrix.DefaultNodes[startNodeEndNode[1]]);
+                    //Makes path correct order
+                    path.Reverse();
+                    //Prints all nodes in shortest path to console
+                    var node = path.GetEnumerator();
+                    {
+                        while (node.MoveNext())
+                        {
+                            Console.Write(node.Current + " ");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ExceptionThrown(ex);
                 }
                 //If a detour node is added, print message to console
-                if (startNodeEndNode.Count > 2)
+                if (startNodeEndNode.Count > 2)            //O(n)
                 {
                     Console.Write(" - DETOUR STOP - ");
                     printTotalTime = false;
@@ -158,47 +215,24 @@ namespace Djikstra
                 //If a detour is added, rund the method again to
                 //find the shortest path with detour node set as start node,
                 //and end node as new end node
-                startNodeEndNode.Remove(startNode);
-                if (startNodeEndNode.Count >= 2)
-                { 
-                    RunMatrix(startNodeEndNode, totalTime); 
+                startNodeEndNode.Remove(startNodeEndNode[0]);
+                if (startNodeEndNode.Count >= 2)            //O(n)
+                {
+                    RunMatrix(startNodeEndNode, totalTime);
                 }
                 //Prints total time from start node to end node
-                if (printTotalTime)                    
-                    Console.WriteLine("\n\nTotal time: " + totalTime);
+                if (printTotalTime)            //O(n)
+                {
+                    Console.WriteLine($"\n\nTotal time: {totalTime}");
+                    UserInput.AskUserForNewSearch();
+                }
             }
             catch (Exception ex)
             {
                 ExceptionThrown(ex);
             }
         }
-        //This recursion is to build a list of all the nodes visited in the shortest path.
-        //First we look for the element where NodeB == endNode and add this to our list.
-        //NodeA is the previous node in our path.
-        //If NodeA is same a startNode, we have a direct connection between
-        //startNode and endNode and can return that value. If not, then we change the value of endNode
-        //to NodeA, and call the funciton again until we find NodeA == startNode.
-        //Recursion is a good way to do this, since we only have to use one loop and get a lower ORDO.
-        //And we use the recusion when we find what we are looking for, so we don't have to
-        //look through the whole loop.
-        public static List<char> FindAllNodesInShortestPath(List<Node> node, List<char> path, int startNode, char endNode)
-        {
-            for (int i = 0; i < node.Count; i++)
-            {              
-                if (node[i].NodeB == endNode)
-                {
-                    path.Add(node[i].NodeB);
-                    if (node[i].NodeA == Matrix.DefaultNodes[startNode])
-                    {
-                        path.Add(Matrix.DefaultNodes[startNode]);                      
-                        return path;
-                    }
-                        endNode = node[i].NodeA;
-                        return FindAllNodesInShortestPath(node, path, startNode, endNode);
-                }
-            }
-            return  new List<char>(); 
-        }
+
         //Method to find shortest path to all nodes from starting node
         public static List<Node> ShortestPath(
             int[] edges,
@@ -240,18 +274,6 @@ namespace Djikstra
                                 matrix,
                                 numberOfNodes,
                                 nodePath);
-        }
-        //checks if input is a correct given int between max and min value
-        public static int Invalid_input_check(int min, int max)
-        {
-            int parseOK;
-
-            while (!int.TryParse(Console.ReadLine(), out parseOK) || parseOK < min || parseOK >= max)
-
-            {
-                Console.WriteLine("Invalid input");
-            }
-            return parseOK;
         }
     }
 }
